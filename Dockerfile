@@ -12,6 +12,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y python3 \
  python3-pip \
  python3-venv \
+ python3-dev \
+ build-essential \
  curl \
  bzip2 \
  tabix \
@@ -42,5 +44,6 @@ RUN pip install medaka
 RUN pip install pandas 
 RUN pip install gtfparse
 RUN pip install bio 
+RUN pip install whatshap 
 
 ENV PATH="$PATH:/opt/CoLoRGen"

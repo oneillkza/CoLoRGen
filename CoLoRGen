@@ -72,7 +72,7 @@ default_log_file=${log_folder}stout.log
 error_log_file=${log_folder}error.log
 
 # start virtualenv
-source venv/bin/activate
+#source venv/bin/activate
 
 echo "$(date) start script" > ${default_log_file}
 echo This is the default log file >> ${default_log_file}
@@ -210,4 +210,4 @@ medaka consensus  ${sample}_clean.bam  "${PROBS}" --model "${model_m}" --batch_s
 variant_caller.py ${sample}.fasta ${sample}_genes_sorted.bam ${PROBS} ${star_alleles} ${gene_json} ${haplotype_folder}haplotypes ${reference_gtf}
 
 # end virtualenv
-deactivate
+#deactivate
