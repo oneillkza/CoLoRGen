@@ -80,7 +80,7 @@ echo "$(date) start script" > ${error_log_file}
 echo This is the error log >> ${error_log_file}
 
 # build fasta and bed files of the targeted region and genes
-python build_gene.py -i ${gene_json} -o ${ref_folder} -r ${reference_genome}
+build_gene.py -i ${gene_json} -o ${ref_folder} -r ${reference_genome}
 
 # copy the raw data to the working directory
 if [[ ${nanopore_sequencing_files} == *.gz ]]; then
@@ -117,7 +117,7 @@ samtools index ${mapped_folder}select_reads_taged.bam
 # get secondary alignments
 echo "$(date) get secondatry alignments" >> ${default_log_file}
 echo "$(date) get secondatry alignments"
-python get_second_aligments.py --log_level ${log_level}  --log_file ${default_log_file} -f ${raw_reads_folder}all_reads.fastq.gz -i ${mapped_folder}select_reads_taged.bam -o ${haplotype_folder}select_reads_taged -s ${target_start} -t ${target_stop}
+get_second_aligments.py --log_level ${log_level}  --log_file ${default_log_file} -f ${raw_reads_folder}all_reads.fastq.gz -i ${mapped_folder}select_reads_taged.bam -o ${haplotype_folder}select_reads_taged -s ${target_start} -t ${target_stop}
 cat ${haplotype_folder}select_reads_taged_H*.fastq > ${haplotype_folder}select_reads_taged.fastq
 
 # align the secondary alignments
@@ -133,7 +133,7 @@ samtools index ${sample_sec}_sorted.bam
 echo "$(date) find insertion and deletions and build haplotypes" >> ${default_log_file}
 echo "$(date) find insertion and deletions and build haplotypes"
 
-python build_consensus_sequence.py --log_level ${log_level} --log_file ${default_log_file} -i ${sample_sec}_sorted.bam -o ${haplotype_folder}consensus_1 -r ${reference_genome} -c ${target_chr} -s ${target_start} -t ${target_stop}
+build_consensus_sequence.py --log_level ${log_level} --log_file ${default_log_file} -i ${sample_sec}_sorted.bam -o ${haplotype_folder}consensus_1 -r ${reference_genome} -c ${target_chr} -s ${target_start} -t ${target_stop}
 
 # map reads to new consensus H1
 echo "$(date) build consensus_2_H1" >> ${default_log_file}
@@ -169,7 +169,7 @@ samtools sort ${sample}.bam > ${sample}_sorted.bam
 samtools index ${sample}_sorted.bam
 
 # clean mapped reads
-python clean_bam.py --log_level ${log_level}  --log_file ${default_log_file} -i ${sample}_sorted.bam -o ${sample}_clean
+clean_bam.py --log_level ${log_level}  --log_file ${default_log_file} -i ${sample}_sorted.bam -o ${sample}_clean
 samtools index ${sample}_clean.bam
 
 # make consensus 3
@@ -190,7 +190,7 @@ samtools sort ${sample}.bam > ${sample}_sorted.bam
 samtools index ${sample}_sorted.bam
 
 # clean mapped reads
-python clean_bam.py --log_level ${log_level}  --log_file ${default_log_file} -i ${sample}_sorted.bam -o ${sample}_clean
+clean_bam.py --log_level ${log_level}  --log_file ${default_log_file} -i ${sample}_sorted.bam -o ${sample}_clean
 samtools index ${sample}_clean.bam
 
 # build reference files
@@ -207,7 +207,7 @@ echo "$(date) build consensus_4" >> ${default_log_file}
 echo "$(date) build consensus_4"
 PROBS="${sample}_probs.hdf"
 medaka consensus  ${sample}_clean.bam  "${PROBS}" --model "${model_m}" --batch_size 100  --threads "${number_treats}"
-python variant_caller.py ${sample}.fasta ${sample}_genes_sorted.bam ${PROBS} ${star_alleles} ${gene_json} ${haplotype_folder}haplotypes ${reference_gtf}
+variant_caller.py ${sample}.fasta ${sample}_genes_sorted.bam ${PROBS} ${star_alleles} ${gene_json} ${haplotype_folder}haplotypes ${reference_gtf}
 
 # end virtualenv
 deactivate
