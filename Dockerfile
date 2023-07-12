@@ -1,10 +1,13 @@
 FROM ubuntu:jammy
 
-# Somewhat derived from https://hub.docker.com/r/staphb/minimap2/dockerfile
+# This container should provide all the libraries necessary for running the Python script parts of CoLoRGen.
+# The remaining steps will pull in their own containers on a per-step basis, 
+# to reduce dependency clashes and bloat in this container.
 
-# for easy upgrade later. ARG variables only persist during image build time
+
 ARG MINIMAP2_VER="2.24"
 
+# Important for some install scripts:
 ENV DEBIAN_FRONTEND=noninteractive
 
 
@@ -36,8 +39,9 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 #Install CoLoRGen from GitHub:
 RUN mkdir -p /opt
 WORKDIR /opt
-RUN git clone https://github.com/laurentijntilleman/CoLoRGen.git
+RUN git clone https://github.com/oneillkza/CoLoRGen.git
 RUN chmod a+x CoLoRGen/CoLoRGen
+RUN chmod a+x CoLoRGen/*.py
 
 RUN pip install --upgrade pip
 RUN pip install medaka 
